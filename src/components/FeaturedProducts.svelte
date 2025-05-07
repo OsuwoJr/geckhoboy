@@ -41,7 +41,10 @@
     // Add state to track flipped cards
     let flippedCards = new Set<string>();
 
-    function toggleFlip(productId: string) {
+    function toggleFlip(productId: string, event: MouseEvent | TouchEvent) {
+        // Prevent the click from bubbling up to parent elements
+        event.stopPropagation();
+        
         if (flippedCards.has(productId)) {
             flippedCards.delete(productId);
         } else {
@@ -57,8 +60,10 @@
         <div class="products-grid">
             {#each products as product}
                 <div class="product-card" class:flipped={flippedCards.has(product.id)}>
-                    <div class="product-image-container" on:click={() => toggleFlip(product.id)}>
-                        <div class="product-image">
+                    <div class="product-image-container">
+                        <div class="product-image" 
+                             on:click={(e) => toggleFlip(product.id, e)}
+                             on:touchstart={(e) => toggleFlip(product.id, e)}>
                             <div class="front">
                                 <img src={product.image} alt={product.name} />
                             </div>
@@ -125,7 +130,6 @@
     .product-image-container {
         width: 100%;
         perspective: 1000px;
-        cursor: pointer;
     }
 
     .product-image {
@@ -134,6 +138,8 @@
         height: 300px;
         transform-style: preserve-3d;
         transition: transform 0.6s ease;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
     }
 
     .front, .back {
@@ -141,6 +147,7 @@
         width: 100%;
         height: 100%;
         backface-visibility: hidden;
+        -webkit-backface-visibility: hidden; /* For Safari */
         overflow: hidden;
     }
 

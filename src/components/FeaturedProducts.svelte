@@ -37,6 +37,18 @@
             image: product.image
         });
     }
+
+    // Add state to track flipped cards
+    let flippedCards = new Set<string>();
+
+    function toggleFlip(productId: string) {
+        if (flippedCards.has(productId)) {
+            flippedCards.delete(productId);
+        } else {
+            flippedCards.add(productId);
+        }
+        flippedCards = flippedCards; // Trigger reactivity
+    }
 </script>
 
 <section class="featured-products" id="featured-products">
@@ -44,8 +56,8 @@
         <h2>Featured Products</h2>
         <div class="products-grid">
             {#each products as product}
-                <div class="product-card">
-                    <div class="product-image-container">
+                <div class="product-card" class:flipped={flippedCards.has(product.id)}>
+                    <div class="product-image-container" on:click={() => toggleFlip(product.id)}>
                         <div class="product-image">
                             <div class="front">
                                 <img src={product.image} alt={product.name} />
@@ -113,6 +125,7 @@
     .product-image-container {
         width: 100%;
         perspective: 1000px;
+        cursor: pointer;
     }
 
     .product-image {
@@ -121,10 +134,6 @@
         height: 300px;
         transform-style: preserve-3d;
         transition: transform 0.6s ease;
-    }
-
-    .product-card:hover .product-image {
-        transform: rotateY(180deg);
     }
 
     .front, .back {
@@ -185,13 +194,16 @@
         background-color: #8aa31d;
     }
 
+    /* Desktop hover effect */
+    @media (hover: hover) {
+        .product-card:hover .product-image {
+            transform: rotateY(180deg);
+        }
+    }
+
     /* Touch device support */
     @media (hover: none) {
-        .product-image {
-            transition: transform 0.6s ease;
-        }
-        
-        .product-card:active .product-image {
+        .product-card.flipped .product-image {
             transform: rotateY(180deg);
         }
     }

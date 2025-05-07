@@ -45,6 +45,7 @@
     }, {} as Record<string, boolean>);
 
     function toggleFlip(productId: string, event: MouseEvent | TouchEvent) {
+        event.preventDefault();
         event.stopPropagation();
         flippedStates[productId] = !flippedStates[productId];
         flippedStates = flippedStates; // Trigger reactivity
@@ -60,7 +61,7 @@
                     <div class="product-image-container">
                         <div class="product-image" 
                              on:click={(e) => toggleFlip(product.id, e)}
-                             on:touchstart={(e) => toggleFlip(product.id, e)}>
+                             on:touchend={(e) => toggleFlip(product.id, e)}>
                             <div class="front">
                                 <img src={product.image} alt={product.name} />
                             </div>
@@ -138,6 +139,7 @@
         transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: pointer;
         -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
     }
 
     .front, .back {

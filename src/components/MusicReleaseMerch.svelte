@@ -94,6 +94,16 @@
             quantity: 1
         });
     }
+
+    // Create a separate flipped state for each item
+    let flippedStates = new Map<string, boolean>();
+
+    function toggleFlip(itemId: string, event: MouseEvent | TouchEvent) {
+        event.preventDefault();
+        event.stopPropagation();
+        flippedStates.set(itemId, !flippedStates.get(itemId));
+        flippedStates = flippedStates; // Trigger reactivity
+    }
 </script>
 
 <section class="music-release-merch" id="music-release-merch">
@@ -107,9 +117,11 @@
                 </div>
                 <div class="products-grid">
                     {#each release.items as item}
-                        <div class="product-card">
+                        <div class="product-card" class:flipped={flippedStates.get(item.id)}>
                             <div class="product-image-container">
-                                <div class="product-image">
+                                <div class="product-image" 
+                                     on:click={(e) => toggleFlip(item.id, e)}
+                                     on:touchend={(e) => toggleFlip(item.id, e)}>
                                     <div class="front">
                                         <img src={item.image} alt={item.name} />
                                     </div>
@@ -198,6 +210,7 @@
     }
 
     .product-image-container {
+        position: relative;
         width: 100%;
         perspective: 1000px;
     }
@@ -207,11 +220,10 @@
         width: 100%;
         height: 300px;
         transform-style: preserve-3d;
-        transition: transform 0.6s ease;
-    }
-
-    .product-card:hover .product-image {
-        transform: rotateY(180deg);
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
     }
 
     .front, .back {
@@ -219,7 +231,9 @@
         width: 100%;
         height: 100%;
         backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
         overflow: hidden;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .back {
@@ -230,6 +244,21 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        display: block;
+    }
+
+    /* Desktop hover effect */
+    @media (hover: hover) {
+        .product-card:hover .product-image {
+            transform: rotateY(180deg);
+        }
+    }
+
+    /* Touch device support */
+    @media (hover: none) {
+        .product-card.flipped .product-image {
+            transform: rotateY(180deg);
+        }
     }
 
     .product-info {
@@ -270,17 +299,6 @@
 
     .add-to-cart:hover {
         background-color: #8aa31d;
-    }
-
-    /* Touch device support */
-    @media (hover: none) {
-        .product-image {
-            transition: transform 0.6s ease;
-        }
-        
-        .product-card:active .product-image {
-            transform: rotateY(180deg);
-        }
     }
 
     @media (max-width: 768px) {

@@ -38,19 +38,16 @@
         });
     }
 
-    // Add state to track flipped cards
-    let flippedCards = new Set<string>();
+    // Create a separate flipped state for each product
+    let flippedStates = products.reduce((acc, product) => {
+        acc[product.id] = false;
+        return acc;
+    }, {} as Record<string, boolean>);
 
     function toggleFlip(productId: string, event: MouseEvent | TouchEvent) {
-        // Prevent the click from bubbling up to parent elements
         event.stopPropagation();
-        
-        if (flippedCards.has(productId)) {
-            flippedCards.delete(productId);
-        } else {
-            flippedCards.add(productId);
-        }
-        flippedCards = flippedCards; // Trigger reactivity
+        flippedStates[productId] = !flippedStates[productId];
+        flippedStates = flippedStates; // Trigger reactivity
     }
 </script>
 
@@ -59,7 +56,7 @@
         <h2>Featured Products</h2>
         <div class="products-grid">
             {#each products as product}
-                <div class="product-card" class:flipped={flippedCards.has(product.id)}>
+                <div class="product-card" class:flipped={flippedStates[product.id]}>
                     <div class="product-image-container">
                         <div class="product-image" 
                              on:click={(e) => toggleFlip(product.id, e)}
@@ -128,6 +125,7 @@
     }
 
     .product-image-container {
+        position: relative;
         width: 100%;
         perspective: 1000px;
     }
@@ -137,9 +135,9 @@
         width: 100%;
         height: 300px;
         transform-style: preserve-3d;
-        transition: transform 0.6s ease;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: pointer;
-        -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+        -webkit-tap-highlight-color: transparent;
     }
 
     .front, .back {
@@ -147,8 +145,9 @@
         width: 100%;
         height: 100%;
         backface-visibility: hidden;
-        -webkit-backface-visibility: hidden; /* For Safari */
+        -webkit-backface-visibility: hidden;
         overflow: hidden;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .back {
@@ -159,6 +158,7 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        display: block;
     }
 
     .product-info {

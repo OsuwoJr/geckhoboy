@@ -2,7 +2,7 @@
 	import { onMount } from "svelte";
 	import { browser } from '$app/environment';
 
-	const year = new Date().getFullYear();
+	const currentYear = new Date().getFullYear();
 
 	let email = "";
 	let subscribeStatus = "";
@@ -23,13 +23,16 @@
 		{ name: "Booking", link: "/contact", icon: "fa-calendar-alt" }
 	];
 
-	const socials = [
-		{ name: "Instagram", icon: "fab fa-instagram", link: "https://www.instagram.com/osvestudios/", color: "#E1306C" },
-		{ name: "X", icon: "fab fa-x-twitter", link: "https://x.com/osvestudios", color: "#1DA1F2" },
-		{ name: "Facebook", icon: "fab fa-facebook", link: "https://www.facebook.com/osvestudios", color: "#4267B2" },
-		{ name: "TikTok", icon: "fab fa-tiktok", link: "https://www.tiktok.com/@osvestudios", color: "#000000" },
-		{ name: "YouTube", icon: "fab fa-youtube", link: "https://www.youtube.com/channel/osvestudios", color: "#FF0000" },
-		{ name: "Spotify", icon: "fab fa-spotify", link: "https://open.spotify.com/user/osvestudios", color: "#1ED760" }
+	const socialLinks = [
+		{ name: 'YouTube', icon: 'fab fa-youtube', href: 'https://youtube.com/@geckhoboy', color: '#FF0000' },
+		{ name: 'Spotify', icon: 'fab fa-spotify', href: 'https://open.spotify.com/artist/659wAEZkJXFdNQ1vHK9ZJa?si=kVwc73oXTfmTB-hz0UWgYA', color: '#1ED760' },
+		{ name: 'Apple Music', icon: 'fab fa-apple', href: 'https://music.apple.com/us/artist/geckhoboy/1810874244', color: '#FB2D3F' },
+		{ name: 'Boomplay', icon: 'fas fa-music', href: 'https://www.boomplay.com/search/default/geckhoboy', color: '#00A8E1' }
+	];
+
+	const followLinks = [
+		{ name: 'Instagram', icon: 'fab fa-instagram', href: 'https://instagram.com/geckhoboy', color: '#E1306C' },
+		{ name: 'TikTok', icon: 'fab fa-tiktok', href: 'https://tiktok.com/@geckhoboy', color: '#000000' }
 	];
 
 	// Contact information for development services
@@ -92,146 +95,60 @@
 	});
 </script>
 
-<footer class="relative bg-black text-white mt-20 border-t border-[#00BFFF]/40 overflow-hidden">
-	<div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 relative z-10">
-
-		<!-- Logo + Tagline -->
-		<div class="flex flex-col items-start">
-			<a href="/" class="block mb-4 transition-transform hover:scale-105 duration-300">
-				<img src="/logo.png" alt="OSVE STUDIOS Logo" class="h-14 w-14" />
-			</a>
-			<p class="text-sm text-gray-400 italic mb-4">"Electrifying Sound. Limitless Creativity."</p>
-			<div class="flex space-x-4 mt-2">
-				{#each socials.slice(0, 4) as soc}
-					<a 
-						href={soc.link} 
-						target="_blank" 
-						rel="noopener noreferrer" 
-						class="text-white hover:text-[{soc.color}] transition-all duration-300 hover:scale-110"
-						aria-label={soc.name}
-					>
-						<i class="{soc.icon} text-xl"></i>
-					</a>
-				{/each}
+<footer class="footer">
+	<div class="footer-content">
+		<div class="footer-grid">
+			<div class="footer-brand">
+				<h2>GECKHOBOY</h2>
+				<p>Creating extraordinary experiences through music and art</p>
 			</div>
-		</div>
 
-		<!-- Navigation -->
-		<div>
-			<h3 class="text-xl font-bold text-[#00BFFF] mb-4 flex items-center">
-				<i class="fas fa-compass mr-2"></i> Explore
-			</h3>
-			<ul class="space-y-2">
-				{#each tabs as tab}
-					<li>
+			<div class="footer-links">
+				<h3>Quick Links</h3>
+				<ul>
+					<li><a href="/">Home</a></li>
+					<li><a href="#featured-products">Merch</a></li>
+					<li><a href="/booking">Book Now</a></li>
+				</ul>
+			</div>
+
+			<div class="footer-social">
+				<h3>Connect</h3>
+				<div class="social-icons">
+					{#each socialLinks as link}
 						<a 
-							href={tab.link} 
-							class={"flex items-center hover:text-[#00BFFF] hover:pl-2 transition-all duration-300 " + 
-								(currentPath === tab.link ? "text-[#00BFFF]" : "")}
+							href={link.href} 
+							target="_blank" 
+							rel="noopener noreferrer"
+							class="social-icon"
+							aria-label={link.name}
+							style="--hover-color: {link.color}"
 						>
-							<i class={"fas " + tab.icon + " w-5 mr-2 text-[#00BFFF]/70"}></i>
-							{tab.name}
+							<i class={link.icon}></i>
 						</a>
-					</li>
-				{/each}
-			</ul>
-		</div>
-
-		<!-- Subscribe / Contact -->
-		<div>
-			<h3 class="text-xl font-bold text-[#00BFFF] mb-4 flex items-center">
-				<i class="fas fa-envelope mr-2"></i> Stay Updated
-			</h3>
-			<p class="text-sm text-gray-400 mb-3">Get updates on our latest studio sessions, projects and special offers.</p>
-			
-			<form on:submit={handleSubscribe} class="mb-4">
-				<div class="relative mb-3">
-					<input 
-						type="email" 
-						bind:value={email}
-						placeholder="Your email"
-						class="w-full py-2 px-4 bg-black border border-[#00BFFF]/50 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#00BFFF] focus:ring-1 focus:ring-[#00BFFF]"
-						required
-					/>
+					{/each}
 				</div>
-				<button 
-					type="submit"
-					disabled={isSubscribing}
-					class="w-full py-2 bg-[#00BFFF] hover:bg-[#0099CC] text-white rounded-lg transition-all flex items-center justify-center"
-				>
-					{#if isSubscribing}
-						<i class="fas fa-circle-notch fa-spin mr-2"></i> Subscribing...
-					{:else}
-						<i class="fas fa-paper-plane mr-2"></i> Subscribe
-					{/if}
-				</button>
-				{#if subscribeStatus}
-					<p class="mt-2 text-sm {subscribeStatus.includes('Thank you') ? 'text-green-500' : 'text-red-500'}">
-						{subscribeStatus}
-					</p>
-				{/if}
-			</form>
-			
-			<h4 class="text-lg font-semibold text-[#00BFFF] mt-6 mb-2">Contact Us</h4>
-			<div class="grid grid-cols-1 gap-2">
-				{#each studioContacts as contact}
-					<a 
-						href={contact.link} 
-						target="_blank" 
-						rel="noopener noreferrer" 
-						class="flex items-center gap-2 text-white hover:text-[{contact.color}] transition-all duration-300 hover:translate-x-1"
-					>
-						<i class="{contact.icon} text-lg"></i>
-						<span class="text-sm">{contact.name}</span>
-					</a>
-				{/each}
+
+				<h3 class="follow-title">Follow Me</h3>
+				<div class="social-icons">
+					{#each followLinks as link}
+						<a 
+							href={link.href} 
+							target="_blank" 
+							rel="noopener noreferrer"
+							class="social-icon"
+							aria-label={link.name}
+							style="--hover-color: {link.color}"
+						>
+							<i class={link.icon}></i>
+						</a>
+					{/each}
+				</div>
 			</div>
 		</div>
 
-		<!-- Hours & Legal -->
-		<div>
-			<h3 class="text-xl font-bold text-[#00BFFF] mb-4 flex items-center">
-				<i class="fas fa-clock mr-2"></i> Studio Hours
-			</h3>
-			<ul class="text-sm text-gray-300 space-y-2 mb-6">
-				<li class="flex justify-between">
-					<span>Monday - Friday</span>
-					<span>10 AM - 10 PM</span>
-				</li>
-				<li class="flex justify-between">
-					<span>Saturday</span>
-					<span>12 PM - 8 PM</span>
-				</li>
-				<li class="flex justify-between">
-					<span>Sunday</span>
-					<span>By Appointment</span>
-				</li>
-			</ul>
-			
-			<h4 class="text-lg font-semibold text-[#00BFFF] mt-6 mb-2">Legal</h4>
-			<ul class="space-y-2">
-				{#each legal as item}
-					<li>
-						<a 
-							href={item.link} 
-							class="flex items-center hover:text-[#00BFFF] transition-all duration-300"
-						>
-							<i class={"fas " + item.icon + " w-5 mr-2 text-[#00BFFF]/70"}></i>
-							{item.name}
-						</a>
-					</li>
-				{/each}
-			</ul>
-		</div>
-	</div>
-	
-	<!-- Copyright -->
-	<div class="py-4 border-t border-[#00BFFF]/20">
-		<div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-center text-sm text-gray-500">
-			<p>© {year} OSVE STUDIOS. All rights reserved.</p>
-			<div class="mt-2 sm:mt-0">
-				<p>Designed with <i class="fas fa-heart text-[#00BFFF]"></i> in Kenya</p>
-			</div>
+		<div class="footer-bottom">
+			<p>&copy; {currentYear} GECKHOBOY. All rights reserved.</p>
 		</div>
 	</div>
 </footer>
@@ -255,5 +172,139 @@
 	/* Smooth transitions */
 	.transition-all {
 		transition: all 0.3s ease-in-out;
+	}
+
+	.footer {
+		background-color: #000;
+		color: #fff;
+		padding: 4rem 1rem 2rem;
+		position: relative;
+		border-top: 1px solid rgba(160, 185, 33, 0.1);
+	}
+
+	.footer::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 1px;
+		background: linear-gradient(
+			to right,
+			transparent,
+			rgba(160, 185, 33, 0.3),
+			transparent
+		);
+	}
+
+	.footer-content {
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+
+	.footer-grid {
+		display: grid;
+		grid-template-columns: 2fr 1fr 1fr;
+		gap: 4rem;
+		margin-bottom: 3rem;
+	}
+
+	.footer-brand h2 {
+		font-family: 'Impact', sans-serif;
+		font-size: 2rem;
+		color: #a0b921;
+		margin-bottom: 1rem;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+	}
+
+	.footer-brand p {
+		color: #888;
+		font-size: 0.9rem;
+		line-height: 1.6;
+	}
+
+	.footer-links h3,
+	.footer-social h3 {
+		color: #a0b921;
+		font-size: 1.1rem;
+		margin-bottom: 1.5rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.follow-title {
+		margin-top: 2rem;
+	}
+
+	.footer-links ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.footer-links li {
+		margin-bottom: 0.75rem;
+	}
+
+	.footer-links a {
+		color: #888;
+		text-decoration: none;
+		transition: color 0.3s ease;
+	}
+
+	.footer-links a:hover {
+		color: #a0b921;
+	}
+
+	.social-icons {
+		display: flex;
+		gap: 1rem;
+	}
+
+	.social-icon {
+		color: #888;
+		font-size: 1.5rem;
+		transition: all 0.3s ease;
+	}
+
+	.social-icon:hover {
+		color: var(--hover-color);
+		transform: translateY(-2px);
+	}
+
+	.footer-bottom {
+		text-align: center;
+		padding-top: 2rem;
+		border-top: 1px solid rgba(160, 185, 33, 0.1);
+	}
+
+	.footer-bottom p {
+		color: #666;
+		font-size: 0.9rem;
+	}
+
+	@media (max-width: 768px) {
+		.footer {
+			padding: 3rem 1rem 1.5rem;
+		}
+
+		.footer-grid {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+
+		.footer-brand {
+			text-align: center;
+		}
+
+		.footer-links,
+		.footer-social {
+			text-align: center;
+		}
+
+		.social-icons {
+			justify-content: center;
+		}
 	}
 </style>

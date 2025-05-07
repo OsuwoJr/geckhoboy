@@ -1,65 +1,50 @@
 <script lang="ts">
     import { onMount } from "svelte";
+    import { goto } from '$app/navigation';
+    import Button from './Button.svelte';
     
-    // Clean and simple scroll handling function
-    function scrollToContent() {
-        const contentElement = document.getElementById('content-start');
-        if (contentElement) {
-            contentElement.scrollIntoView({behavior: 'smooth'});
+    let heroElement: HTMLElement;
+    
+    onMount(() => {
+        // Add any initialization logic here
+    });
+
+    function scrollToFeaturedProducts() {
+        const featuredSection = document.getElementById('featured-products');
+        if (featuredSection) {
+            const yOffset = -100; // Offset to account for header height
+            const y = featuredSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({
+                top: y,
+                behavior: 'smooth'
+            });
         }
+    }
+
+    function navigateToBooking() {
+        goto('/booking');
     }
 </script>
 
-<section class="hero relative flex items-center justify-center min-h-[80vh] sm:h-screen text-white px-4 overflow-hidden">
-    <!-- Transparent overlay to improve text readability without hiding background animations -->
-    <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/40 z-10 pointer-events-none"></div>
-    
-    <!-- Hero Content -->
-    <div class="relative z-20 text-center bg-black/30 backdrop-blur-sm p-6 sm:p-8 rounded-lg max-w-[95%] sm:max-w-2xl mx-auto">
-        <h1 class="font-bold leading-tight tracking-tight break-words">
-            <span class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#00BFFF] block">OSVE</span>
-            <span class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl block">STUDIOS</span>
+<section 
+    class="hero" 
+    bind:this={heroElement}
+    role="banner"
+    aria-label="Hero section"
+>
+    <div class="hero-content">
+        <h1>
+            <span class="slogan">It's</span>
+            <span class="brand">GECKHOBOY</span>
         </h1>
-        <p class="text-lg md:text-2xl mt-4 text-gray-200">Electrifying Sound. Limitless Creativity.</p>
-        
-        <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/services" 
-               class="inline-block bg-[#00BFFF] px-6 py-3 text-lg font-semibold rounded-lg shadow-lg transition-all hover:bg-[#0099CC] hover:scale-105 flex items-center justify-center"          
-               rel="noopener noreferrer"
-               aria-label="Book a session at OSVE Studios">
-                <i class="fas fa-calendar-alt mr-2"></i> Book a Session
-            </a>
-            <a href="/projects" 
-               class="inline-block bg-black/60 border border-[#00BFFF] backdrop-blur-md px-6 py-3 text-lg font-semibold rounded-lg shadow-lg transition-all hover:bg-[#00BFFF]/20 hover:scale-105 flex items-center justify-center"          
-               rel="noopener noreferrer"
-               aria-label="Explore our portfolio">
-                <i class="fas fa-music mr-2"></i> Our Work
-            </a>
-        </div>
-        
-        <!-- Social Media Quick Links -->
-        <div class="mt-8 flex justify-center space-x-4">
-            <a href="https://www.instagram.com/osvestudios/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-2xl hover:text-[#E1306C] transition-all hover:scale-110">
-                <i class="fab fa-instagram"></i>
-            </a>
-            <a href="https://open.spotify.com/user/osvestudios" target="_blank" rel="noopener noreferrer" aria-label="Spotify" class="text-2xl hover:text-[#1ED760] transition-all hover:scale-110">
-                <i class="fab fa-spotify"></i>
-            </a>
-            <a href="https://www.youtube.com/channel/osvestudios" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="text-2xl hover:text-[#FF0000] transition-all hover:scale-110">
-                <i class="fab fa-youtube"></i>
-            </a>
+        <div class="cta-buttons">
+            <Button text="Explore Merch" variant="primary" size="lg" onClick={scrollToFeaturedProducts} />
+            <Button text="Book Now" variant="secondary" size="lg" onClick={navigateToBooking} />
         </div>
     </div>
-    
-    <!-- Scroll down indicator -->
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce hidden sm:block">
-        <button 
-            on:click={scrollToContent}
-            class="text-white opacity-80 hover:opacity-100 transition-opacity"
-            aria-label="Scroll down to content"
-        >
-            <i class="fas fa-chevron-down text-2xl"></i>
-        </button>
+    <div class="hero-background">
+        <div class="gradient-overlay"></div>
+        <div class="noise-overlay"></div>
     </div>
 </section>
 
@@ -67,22 +52,127 @@
 <div id="content-start" class="h-0 w-full"></div>
 
 <style>
-    /* Allow background to be completely transparent */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 600px;
+    background: url('/images/hero-bg.svg') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(0, 0, 0, 0.5) 50%,
+        rgba(0, 0, 0, 0.7) 100%
+    );
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2rem;
+}
+
+h1 {
+    font-size: clamp(3rem, 15vw, 8rem);
+    line-height: 1;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.slogan {
+    font-family: 'Brush Script MT', cursive;
+    color: #ff0000;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    transform: rotate(-5deg);
+}
+
+.brand {
+    font-family: 'Impact', sans-serif;
+    font-weight: 900;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 
+        2px 2px 0 #000,
+        -2px -2px 0 #000,
+        2px -2px 0 #000,
+        -2px 2px 0 #000;
+}
+
+
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+.gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(0, 191, 255, 0.1) 0%, transparent 70%);
+}
+
+.noise-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.05;
+}
+
+@media (max-width: 768px) {
     .hero {
-        background-color: transparent;
+        min-height: 500px;
     }
     
-    /* Ensure text is readable */
     h1 {
-        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        font-size: clamp(2.5rem, 12vw, 6rem);
     }
+
     
-    @keyframes bounce {
-        0%, 100% { transform: translateY(0) translateX(-50%); }
-        50% { transform: translateY(-10px) translateX(-50%); }
+
+    .cta-buttons {
+        flex-direction: column;
     }
-    
-    .animate-bounce {
-        animation: bounce 2s infinite;
+
+    .cta-buttons :global(.button) {
+        width: 100%;
+        max-width: 300px;
     }
+}
 </style>

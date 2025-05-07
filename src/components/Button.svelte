@@ -1,25 +1,116 @@
 <script lang="ts">
     export let text: string;
-    export let link: string = "";
-    export let email: string = "";
-    export let phone: string = "";
-    export let download: boolean = false;
-    
-    // Generate the appropriate href based on provided props
-    let href = email 
-        ? `mailto:${email}?subject=Hello&body=Hi%20there,%0D%0A%0D%0AI%27m%20reaching%20out%20regarding...`
-        : phone 
-        ? `tel:${phone}` 
-        : link;
+    export let href: string | undefined = undefined;
+    export let type: 'button' | 'submit' | 'reset' = 'button';
+    export let variant: 'primary' | 'secondary' = 'primary';
+    export let size: 'sm' | 'md' | 'lg' = 'md';
+    export let fullWidth = false;
+    export let disabled = false;
+    export let onClick: (() => void) | undefined = undefined;
 </script>
 
-<a 
-    class="relative overflow-hidden px-4 md:px-6 py-2 text-lg font-medium rounded-full bg-white hover:bg-[#00BFFF] text-slate-950 hover:text-white border border-transparent transition-all duration-300 ease-in-out focus:outline-none hover:border-[#0099CC] active:scale-95"
-    href={href}
-    target={link && !download ? "_blank" : undefined}
-    rel={link && !download ? "noopener noreferrer" : undefined}
-    aria-label={text}
-    download={download ? "" : undefined}
->
-    {text}
-</a>
+{#if href}
+    <a 
+        {href}
+        class="button {variant} {size}"
+        class:full-width={fullWidth}
+        class:disabled
+        on:click|preventDefault={disabled ? undefined : () => {}}
+    >
+        <span class="button-text">{text}</span>
+    </a>
+{:else}
+    <button
+        {type}
+        class="button {variant} {size}"
+        class:full-width={fullWidth}
+        {disabled}
+        on:click={onClick}
+    >
+        <span class="button-text">{text}</span>
+    </button>
+{/if}
+
+<style>
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    text-decoration: none;
+}
+
+.button-text {
+    color: inherit;
+    white-space: nowrap;
+}
+
+/* Primary Button */
+.primary {
+    background-color: #a0b921;
+    color: white;
+}
+
+.primary:hover:not(.disabled) {
+    background-color: #8aa31d;
+    transform: translateY(-1px);
+}
+
+/* Secondary Button */
+.secondary {
+    background-color: transparent;
+    color: #a0b921;
+    border: 2px solid #a0b921;
+}
+
+.secondary:hover:not(.disabled) {
+    background-color: #a0b921;
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Size Variants */
+.sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.md {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+}
+
+.lg {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+}
+
+/* Full Width */
+.full-width {
+    width: 100%;
+}
+
+/* Disabled State */
+.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.button:focus {
+    outline: 2px solid #a0b921;
+    outline-offset: 2px;
+}
+
+@media (hover: none) {
+    .button:hover:not(.disabled) {
+        transform: none;
+    }
+}
+</style>

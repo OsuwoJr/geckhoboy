@@ -82,10 +82,6 @@
           <span>{platform.name}</span>
         </a>
       {/each}
-      <a href="/cart" class="mobile-link" on:click={toggleMenu}>
-        <i class="fas fa-shopping-cart"></i>
-        <span>Cart</span>
-      </a>
     </div>
   {/if}
 </header>

@@ -104,11 +104,11 @@
   .header-content {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1rem;
+    padding: 0.75rem 1rem;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   .logo {
@@ -116,6 +116,8 @@
     font-weight: bold;
     text-decoration: none;
     color: #ffffff;
+    z-index: 1001;
+    padding: 0.5rem;
   }
 
   .nav-desktop {
@@ -143,23 +145,9 @@
   .header-right {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
     justify-content: flex-end;
-  }
-
-  .cart-link {
-    color: #ffffff;
-    padding: 0.5rem;
-    transition: color 0.2s;
-  }
-
-  .cart-link:hover {
-    color: #ff0000;
-  }
-
-  .cart-icon {
-    width: 24px;
-    height: 24px;
+    z-index: 1001;
   }
 
   .menu-button {
@@ -169,32 +157,73 @@
     cursor: pointer;
     padding: 0.5rem;
     color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+
+  .menu-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   .mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: #000000;
-    padding: 1rem;
+    padding: 5rem 1rem 1rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    border-top: 1px solid #333333;
+    z-index: 1000;
+    animation: slideIn 0.3s ease-out;
   }
 
   .mobile-link {
     text-decoration: none;
     color: var(--platform-color);
-    padding: 0.5rem;
-    transition: color 0.2s;
+    padding: 1rem;
+    transition: all 0.2s;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
   }
 
   .mobile-link:hover {
     color: var(--platform-hover-color);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .mobile-link i {
+    font-size: 1.5rem;
+    width: 24px;
+    text-align: center;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
   }
 
   @media (min-width: 768px) {
+    .header-content {
+      padding: 1rem 2rem;
+      gap: 2rem;
+    }
+
     .nav-desktop {
       display: flex;
       gap: 2rem;
